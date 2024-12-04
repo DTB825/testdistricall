@@ -40,4 +40,16 @@ class TaskRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function searchByTitleOrDescription(string $query): array
+    {
+        // Création du QueryBuilder pour récupérer les tâches par titre ou description
+        $qb = $this->createQueryBuilder('t')
+            ->where('t.title LIKE :query')
+            ->orWhere('t.description LIKE :query')
+            ->setParameter('query', '%' . $query . '%');
+
+        // Exécution de la requête et retour des résultats
+        return $qb->getQuery()->getResult();
+    }
 }
